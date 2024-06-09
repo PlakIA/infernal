@@ -1,0 +1,151 @@
+import argparse
+import os
+import socket
+import subprocess
+import sys
+import time
+from pathlib import Path
+
+parser = argparse.ArgumentParser(usage='%(prog)s [options]')
+parser.add_argument('--ip', metavar='', default='127.0.0.1', help='Server IP address (default: 127.0.0.1)')
+parser.add_argument('--port', metavar='', type=int, default=5005, help='Server port (default: 5005)')
+parser.add_argument('--folder', metavar='', default='tests', help='Test saving folder (default: tests)')
+parser.add_argument('--user', metavar='', default='user',
+                    help='The user on whose behalf the test is received (default: user)')
+args = parser.parse_args()
+
+ip = args.ip
+port = args.port
+user_pc = args.user
+server = None
+test_path = Path(args.folder)
+test_path.mkdir(parents=True, exist_ok=True)
+
+
+def recv_timeout(sock, timeout=2):
+    sock.setblocking(False)
+    total_data = []
+    data = b''
+    begin = time.time()
+
+    while True:
+        if total_data and time.time() - begin > timeout:
+            break
+        elif time.time() - begin > timeout * 2:
+            break
+
+        try:
+            data = sock.recv(8192)
+            if data:
+                total_data.append(data)
+                begin = time.time()
+            else:
+                time.sleep(0.1)
+        except BlockingIOError:
+            pass
+
+    return b''.join(total_data)
+
+
+def get_non_exist(name):
+    file_path = test_path / name
+    if not file_path.is_file():
+        return file_path.open('wb')
+
+    i = 2
+    while True:
+        newname = f"{name[:-4]} ({i}){name[-4:]}"
+        new_file_path = test_path / newname
+        if not new_file_path.is_file():
+            return new_file_path.open('wb')
+        i += 1
+
+
+def download_tests():
+    global server
+    try:
+        server.sendall(b'GETLIST\r\n')
+        server.sendall(bytes(user_pc, 'utf-8') + b'\r\n')
+        data = recv_timeout(server, 1)
+        if data == b'NO\r\n':
+            print("> Haven't tests")
+            any_key_to_exit()
+
+        directories = data.split(b'\r\n')[2:-1:2]
+        server.sendall(b'QUIT\r\n')
+        server.close()
+
+        for direct in directories:
+            connect()
+            server.sendall(b'GETTEST\r\n')
+            server.sendall(bytes(user_pc, 'utf-8') + b'\r\n')
+            server.sendall(direct + b'\r\n')
+            server.sendall(bytes(user_pc, 'utf-8') + b'\r\n')
+
+            file_name = direct[direct.rfind(b'\\') + 1:].decode('utf-8')
+            with get_non_exist(file_name) as file:
+                data = recv_timeout(server, 5)
+                content_start = data.find(b'\n', data.find(b'\n', data.find(b'\n', data.find(b'\n') + 1)) + 1) + 1
+                file.write(data[content_start:])
+
+            server.sendall(b'QUIT\r\n')
+            server.close()
+
+        print('> All tests downloaded')
+        test_directory = test_path / file_name
+        print('> Open MyTestX test editor')
+        subprocess.run(['MTE.exe', str(test_directory)])
+        any_key_to_exit()
+
+
+    except socket.error as err:
+        print(f"> Socket error: {err}")
+        any_key_to_exit()
+
+    except Exception as e:
+        print(f"> An error occurred: {e}")
+        any_key_to_exit()
+
+
+def connect():
+    global server
+    try:
+        print('> Connecting...')
+        server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        server.connect((ip, port))
+    except socket.error as err:
+        print(f"> Connection error: {err}")
+        server = None
+        any_key_to_exit()
+    else:
+        print('> Connected!')
+
+
+def any_key_to_exit():
+    print()
+    os.system('pause')
+    sys.exit()
+
+
+if __name__ == "__main__":
+    print('''
+ ██▓ ███▄    █   █████▒▓█████  ██▀███   ███▄    █  ▄▄▄       ██▓    
+▓██▒ ██ ▀█   █ ▓██   ▒ ▓█   ▀ ▓██ ▒ ██▒ ██ ▀█   █ ▒████▄    ▓██▒    
+▒██▒▓██  ▀█ ██▒▒████ ░ ▒███   ▓██ ░▄█ ▒▓██  ▀█ ██▒▒██  ▀█▄  ▒██░    
+░██░▓██▒  ▐▌██▒░▓█▒  ░ ▒▓█  ▄ ▒██▀▀█▄  ▓██▒  ▐▌██▒░██▄▄▄▄██ ▒██░    
+░██░▒██░   ▓██░░▒█░    ░▒████▒░██▓ ▒██▒▒██░   ▓██░ ▓█   ▓██▒░██████▒
+░▓  ░ ▒░   ▒ ▒  ▒ ░    ░░ ▒░ ░░ ▒▓ ░▒▓░░ ▒░   ▒ ▒  ▒▒   ▓▒█░░ ▒░▓  ░
+ ▒ ░░ ░░   ░ ▒░ ░       ░ ░  ░  ░▒ ░ ▒░░ ░░   ░ ▒░  ▒   ▒▒ ░░ ░ ▒  ░
+ ▒ ░   ░   ░ ░  ░ ░       ░     ░░   ░    ░   ░ ░   ░   ▒     ░ ░   
+ ░           ░            ░  ░   ░              ░       ░  ░    ░  ░
+                                                                    
+                                                        Infernal v1.0 (Milka)
+                                                        by Plak.I.A
+                                                        
+''')
+    time.sleep(3)
+    connect()
+    if server:
+        print('> The connection from the servers was successfully established')
+        print('> Downloading tests...')
+        download_tests()
