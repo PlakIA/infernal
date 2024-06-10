@@ -1,4 +1,5 @@
 import argparse
+import logging
 import os
 import socket
 import subprocess
@@ -12,7 +13,13 @@ parser.add_argument('--port', metavar='', type=int, default=5005, help='Server p
 parser.add_argument('--folder', metavar='', default='tests', help='Test saving folder (default: tests)')
 parser.add_argument('--user', metavar='', default='user',
                     help='The user on whose behalf the test is received (default: user)')
+parser.add_argument('-F', '--force', action="store_true",
+                    help='Accelerated process of obtaining tests without outputting logs')
+parser.add_argument('-d', '--delete', action='store_true', help='Delete test file after closing MyTestEditor')
 args = parser.parse_args()
+
+level = logging.INFO if not args.force else logging.WARNING
+logging.basicConfig(format='%(asctime)s %(levelname)s %(message)s', datefmt='%H:%M:%S', level=level)
 
 ip = args.ip
 port = args.port
@@ -68,7 +75,7 @@ def download_tests():
         server.sendall(bytes(user_pc, 'utf-8') + b'\r\n')
         data = recv_timeout(server, 1)
         if data == b'NO\r\n':
-            print("> Haven't tests")
+            logging.warning("Haven't tests")
             any_key_to_exit()
 
         directories = data.split(b'\r\n')[2:-1:2]
@@ -91,34 +98,36 @@ def download_tests():
             server.sendall(b'QUIT\r\n')
             server.close()
 
-        print('> All tests downloaded')
+        logging.info('All tests downloaded')
         test_directory = test_path / file_name
-        print('> Open MyTestX test editor')
+        logging.info('Open MyTestX test editor')
         subprocess.run(['MTE.exe', str(test_directory)])
-        any_key_to_exit()
+        if args.delete:
+            os.remove(test_directory)
+            logging.info('Test file deleted')
 
 
     except socket.error as err:
-        print(f"> Socket error: {err}")
+        logging.error(f"Socket error: {err}")
         any_key_to_exit()
 
     except Exception as e:
-        print(f"> An error occurred: {e}")
+        logging.error(f"An error occurred: {e}")
         any_key_to_exit()
 
 
 def connect():
     global server
     try:
-        print('> Connecting...')
+        logging.info('Connecting...')
         server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         server.connect((ip, port))
     except socket.error as err:
-        print(f"> Connection error: {err}")
+        logging.error(f"Connection error: {err}")
         server = None
         any_key_to_exit()
     else:
-        print('> Connected!')
+        logging.info('Connected')
 
 
 def any_key_to_exit():
@@ -139,13 +148,14 @@ if __name__ == "__main__":
  ▒ ░   ░   ░ ░  ░ ░       ░     ░░   ░    ░   ░ ░   ░   ▒     ░ ░   
  ░           ░            ░  ░   ░              ░       ░  ░    ░  ░
                                                                     
-                                                        Infernal v1.0 (Milka)
+                                                        Infernal v1.1 (Milka)
                                                         by Plak.I.A
                                                         
 ''')
-    time.sleep(3)
+    if not args.force:
+        time.sleep(3)
     connect()
     if server:
-        print('> The connection from the servers was successfully established')
-        print('> Downloading tests...')
+        logging.info('The connection from the servers was successfully established')
+        logging.info('Downloading tests...')
         download_tests()
