@@ -7,7 +7,7 @@ The program downloads the test file and then automatically opens it in the edito
 ## Using
 
 ```shell
-python main.py [options]
+python infernal.py [options]
 ```
 
 | Option          | Description                                                                                                      |
