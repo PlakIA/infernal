@@ -13,10 +13,10 @@ python infernal.py [options]
 | Option          | Description                                                                                                      |
 |-----------------|------------------------------------------------------------------------------------------------------------------|
 | `-h` `--help`   | Help message                                                                                                     |
-| `--ip`          | IP address or domain of the server PC (default: `127.0.0.1`)                                                     |
-| `--port`        | Port of server PC (default: `5005`)                                                                              |
-| `--folder`      | Name of folder for saving test files (default: `tests`)                                                          |
-| `--user`        | The username on behalf of which the test will be received is displayed only in the server logs (default: `User`) |
+| `-a` `--ip`     | IP address or domain of the server PC (default: `127.0.0.1`)                                                     |
+| `-p` `--port`   | Port of server PC (default: `5005`)                                                                              |
+| `-d` `--folder` | Name of folder for saving test files (default: `tests`)                                                          |
+| `-u` `--user`   | The username on behalf of which the test will be received is displayed only in the server logs (default: `User`) |
 | `-F` `--force`  | Faster script execution without outputting information logs                                                      |
 
 > [!WARNING]

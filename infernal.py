@@ -8,10 +8,10 @@ import time
 from pathlib import Path
 
 parser = argparse.ArgumentParser(usage='%(prog)s [options]')
-parser.add_argument('--ip', metavar='', default='127.0.0.1', help='Server IP address (default: 127.0.0.1)')
-parser.add_argument('--port', metavar='', type=int, default=5005, help='Server port (default: 5005)')
-parser.add_argument('--folder', metavar='', default='tests', help='Test saving folder (default: tests)')
-parser.add_argument('--user', metavar='', default='user',
+parser.add_argument('-a', '--ip', metavar='', default='127.0.0.1', help='Server IP address (default: 127.0.0.1)')
+parser.add_argument('-p', '--port', metavar='', type=int, default=5005, help='Server port (default: 5005)')
+parser.add_argument('-d', '--folder', metavar='', default='tests', help='Test saving folder (default: tests)')
+parser.add_argument('-u', '--user', metavar='', default='user',
                     help='The user on whose behalf the test is received (default: user)')
 parser.add_argument('-F', '--force', action="store_true",
                     help='Accelerated process of obtaining tests without outputting logs')
@@ -144,7 +144,7 @@ if __name__ == "__main__":
  ▒ ░   ░   ░ ░  ░ ░       ░     ░░   ░    ░   ░ ░   ░   ▒     ░ ░   
  ░           ░            ░  ░   ░              ░       ░  ░    ░  ░
                                                                     
-                                                        infernal 1.2-b
+                                                        infernal v1.2.1-b
                                                         by Plaksin
                                                         
 ''')
