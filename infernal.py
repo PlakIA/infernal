@@ -101,7 +101,7 @@ def download_tests():
         logging.info('All tests downloaded')
         test_directory = test_path / file_name
         logging.info('Open MyTestX test editor')
-        subprocess.run(['MTE.exe', str(test_directory)])
+        subprocess.Popen(['MTE.exe', str(test_directory)])
         if args.delete:
             os.remove(test_directory)
             logging.info('Test file deleted')
@@ -148,7 +148,7 @@ if __name__ == "__main__":
  ▒ ░   ░   ░ ░  ░ ░       ░     ░░   ░    ░   ░ ░   ░   ▒     ░ ░   
  ░           ░            ░  ░   ░              ░       ░  ░    ░  ░
                                                                     
-                                                        infernal 1.1-b
+                                                        infernal 1.1.1-b
                                                         by Plaksin
                                                         
 ''')
