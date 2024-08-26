@@ -15,7 +15,6 @@ parser.add_argument('--user', metavar='', default='user',
                     help='The user on whose behalf the test is received (default: user)')
 parser.add_argument('-F', '--force', action="store_true",
                     help='Accelerated process of obtaining tests without outputting logs')
-parser.add_argument('-d', '--delete', action='store_true', help='Delete test file after closing MyTestEditor')
 args = parser.parse_args()
 
 level = logging.INFO if not args.force else logging.WARNING
@@ -102,9 +101,6 @@ def download_tests():
         test_directory = test_path / file_name
         logging.info('Open MyTestX test editor')
         subprocess.Popen(['MTE.exe', str(test_directory)])
-        if args.delete:
-            os.remove(test_directory)
-            logging.info('Test file deleted')
 
 
     except socket.error as e:
@@ -148,7 +144,7 @@ if __name__ == "__main__":
  ▒ ░   ░   ░ ░  ░ ░       ░     ░░   ░    ░   ░ ░   ░   ▒     ░ ░   
  ░           ░            ░  ░   ░              ░       ░  ░    ░  ░
                                                                     
-                                                        infernal 1.1.1-b
+                                                        infernal 1.2-b
                                                         by Plaksin
                                                         
 ''')
