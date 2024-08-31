@@ -10,15 +10,12 @@ from pathlib import Path
 parser = argparse.ArgumentParser(usage='%(prog)s [options]')
 parser.add_argument('-a', '--ip', metavar='', default='127.0.0.1', help='Server IP address (default: 127.0.0.1)')
 parser.add_argument('-p', '--port', metavar='', type=int, default=5005, help='Server port (default: 5005)')
-parser.add_argument('-d', '--folder', metavar='', default='tests', help='Test saving folder (default: tests)')
+parser.add_argument('-f', '--folder', metavar='', default='tests', help='Test saving folder (default: tests)')
 parser.add_argument('-u', '--user', metavar='', default='user',
                     help='The user on whose behalf the test is received (default: user)')
-parser.add_argument('-F', '--force', action="store_true",
-                    help='Accelerated process of obtaining tests without outputting logs')
 args = parser.parse_args()
 
-level = logging.INFO if not args.force else logging.WARNING
-logging.basicConfig(format='%(asctime)s %(levelname)s %(message)s', datefmt='%H:%M:%S', level=level)
+logging.basicConfig(format='%(asctime)s %(levelname)s %(message)s', datefmt='%H:%M:%S', level=logging.INFO)
 
 ip = args.ip
 port = args.port
@@ -144,12 +141,10 @@ if __name__ == "__main__":
  ▒ ░   ░   ░ ░  ░ ░       ░     ░░   ░    ░   ░ ░   ░   ▒     ░ ░   
  ░           ░            ░  ░   ░              ░       ░  ░    ░  ░
                                                                     
-                                                        infernal v1.2.1-b
+                                                        infernal v1.2.2-b
                                                         by Plaksin
                                                         
 ''')
-    if not args.force:
-        time.sleep(3)
     connect()
     if server:
         logging.info('The connection from the servers was successfully established')
