@@ -83,7 +83,6 @@ def download_tests():
             server.sendall(b'GETTEST\r\n')
             server.sendall(bytes(user_pc, 'utf-8') + b'\r\n')
             server.sendall(directory + b'\r\n')
-            server.sendall(bytes(user_pc, 'utf-8') + b'\r\n')
 
             file_name = directory[directory.rfind(b'\\') + 1:].decode('utf-8')
             with get_non_exist(file_name) as f:
@@ -141,7 +140,7 @@ if __name__ == "__main__":
  ▒ ░   ░   ░ ░  ░ ░       ░     ░░   ░    ░   ░ ░   ░   ▒     ░ ░   
  ░           ░            ░  ░   ░              ░       ░  ░    ░  ░
                                                                     
-                                                        infernal v1.2.2-b
+                                                        infernal v1.2.3-b
                                                         by Plaksin
                                                         
 ''')
