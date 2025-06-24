@@ -4,6 +4,8 @@
 
 ## Скрипты
 
-[infernal classic](infernal_classic/README.md) - классическая редакция infernal для получения ответов
+[infernal classic](https://github.com/PlakIA/infernal/tree/master/infernal_classic) - классическая редакция infernal для
+получения ответов
 
-[infernal extended](infernal_ext/README.md) - расширенная редакция infernal для получения ответов с возможностью телеграм рассылки 
+[infernal extended](https://github.com/PlakIA/infernal/tree/master/infernal_ext) - расширенная редакция infernal для
+получения ответов с возможностью телеграм рассылки 
