@@ -1,0 +1,23 @@
+{
+  "connection": {
+    "ip": "localhost",
+    "port": 5005,
+    "user": "User"
+  },
+  "folder": {
+    "test": "test",
+    "screenshot": "screen"
+  },
+  "extended": {
+    "auto_focus": true
+  },
+  "delete": {
+    "screenshot": true,
+    "test": true
+  },
+  "telegram": {
+    "token": "",
+    "chat_id": "-",
+    "topic_id": 0
+  }
+}
