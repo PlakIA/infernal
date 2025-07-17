@@ -1,0 +1,22 @@
+infernal extended
+Copyright (c) 2024-2025 Iaroslav Plaksin
+
+This product includes the following third-party libraries:
+
+- pyautogui, licensed under the BSD 3-Clause License
+  https://github.com/asweigart/pyautogui
+
+- pygetwindow, licensed under the BSD 3-Clause License
+  https://github.com/asweigart/pygetwindow
+
+- Pillow, licensed under the MIT-CMU License
+  https://github.com/python-pillow/Pillow
+
+  Pillow is based on the Python Imaging Library (PIL),
+  which is Copyright © 1997–2011 by Secret Labs AB and
+  Copyright © 1995–2011 by Fredrik Lundh and contributors.
+
+- python-telegram-bot, licensed under the GNU Lesser General Public License v3.0
+  https://github.com/python-telegram-bot/python-telegram-bot
+
+Original license texts are preserved in accordance with the respective licenses.
