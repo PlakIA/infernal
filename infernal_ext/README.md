@@ -50,6 +50,8 @@ python infernal_ext.py
 
 ## Лицензия
 
-__infernal extended__ является частью проекта __infernal__, распространяемого по лицензии [Apache License 2.0](../LICENSE)
+__infernal extended__ является частью проекта __infernal__, распространяемого по
+лицензии [Apache License 2.0](../LICENSE)
 
-Дополнительные уведомления и упоминания третьих сторон находятся в [NOTICE](./NOTICE), применимом только к __infernal extended__
+Дополнительные уведомления и упоминания третьих сторон находятся в [NOTICE](./NOTICE), применимом только к 
+__infernal extended__

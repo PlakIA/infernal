@@ -15,10 +15,11 @@ logging.basicConfig(
 HOST = "localhost"
 PORT = 5005
 USER = "infernaler"
+TESTS_DIR = "tests"
 
 server = socket.socket()
 
-test_path = pathlib.Path("tests")
+test_path = pathlib.Path(TESTS_DIR)
 test_path.mkdir(parents=True, exist_ok=True)
 
 
