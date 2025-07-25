@@ -12,9 +12,10 @@ logging.basicConfig(
     level=logging.INFO,
 )
 
-ip = "localhost"
-port = 5005
-user = "infernaler"
+HOST = "localhost"
+PORT = 5005
+USER = "infernaler"
+
 server = socket.socket()
 
 test_path = pathlib.Path("tests")
@@ -26,7 +27,7 @@ def connect():
     try:
         logging.info("Connecting...")
         server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        server.connect((ip, port))
+        server.connect((HOST, PORT))
     except socket.error as e:
         logging.error(f"Connection error: {e}")
         any_key_to_exit()
@@ -79,20 +80,19 @@ def download_tests():
     file_name = None
     try:
         server.sendall(b"GETLIST\r\n")
-        server.sendall(bytes(user, "utf-8") + b"\r\n")
+        server.sendall(bytes(USER, "utf-8") + b"\r\n")
         data = recv_timeout(server, 1)
         if data == b"NO\r\n":
             logging.warning("Haven't tests")
+            server.sendall(b"QUIT\r\n")
+            server.close()
             any_key_to_exit()
 
         directories = data.split(b"\r\n")[2:-1:2]
-        server.sendall(b"QUIT\r\n")
-        server.close()
 
         for directory in directories:
-            connect()
             server.sendall(b"GETTEST\r\n")
-            server.sendall(bytes(user, "utf-8") + b"\r\n")
+            server.sendall(bytes(USER, "utf-8") + b"\r\n")
             server.sendall(directory + b"\r\n")
 
             file_name = directory[directory.rfind(b"\\") + 1:].decode("utf-8")
@@ -138,7 +138,7 @@ if __name__ == "__main__":
 █▀    ▀█   █▀    ███          ██████████   ███    ███  ▀█   █▀    ███    █▀  █████▄▄██ 
                                            ███    ███                        ▀                             
 
-                                                            infernal classic v1.1
+                                                            infernal classic v1.2
                                                             by Plaksin
 
     """

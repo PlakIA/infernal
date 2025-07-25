@@ -39,7 +39,7 @@ topic_id = config["telegram"]["topic_id"]
 if not topic_id:
     topic_id = None
 
-server = None
+server = socket.socket()
 
 test_path.mkdir(parents=True, exist_ok=True)
 screen_path.mkdir(parents=True, exist_ok=True)
@@ -62,7 +62,6 @@ def connect():
 def recv_timeout(sock, timeout=2):
     sock.setblocking(False)
     total_data = list()
-    data = b""
     begin = time.time()
 
     while True:
@@ -100,20 +99,21 @@ def get_non_exist(name):
 
 def download_tests():
     global server, task_count
+
+    file_name = None
     try:
         server.sendall(b"GETLIST\r\n")
         server.sendall(bytes(user, "utf-8") + b"\r\n")
         data = recv_timeout(server, 1)
         if data == b"NO\r\n":
             logging.warning("Haven't tests")
+            server.sendall(b"QUIT\r\n")
+            server.close()
             any_key_to_exit()
 
         directories = data.split(b"\r\n")[2:-1:2]
-        server.sendall(b"QUIT\r\n")
-        server.close()
 
         for directory in directories:
-            connect()
             server.sendall(b"GETTEST\r\n")
             server.sendall(bytes(user, "utf-8") + b"\r\n")
             server.sendall(directory + b"\r\n")
@@ -208,7 +208,7 @@ if __name__ == "__main__":
  | || ' \))|  _|/ -_) | '_|| ' \))/ _` || |  / -_)\ \ / |  _| _  
  |_||_||_| |_|  \___| |_|  |_||_| \__,_||_|  \___|/_\_\  \__|(_)                         
 
-                                     infernal extended v0.8
+                                     infernal extended v0.9
                                      by Plak.I.A
 
     """
