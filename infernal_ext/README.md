@@ -47,3 +47,9 @@ python infernal_ext.py
 | `token`      | `str`  | Токен телеграм бота                                                                |
 | `chat_id`    | `str`  | ID целевого чата                                                                   |
 | `topic_id`   | `int`  | ID целевого топика (не обязательно, оставить `0`)                                  |
+
+## Лицензия
+
+__infernal extended__ является частью проекта __infernal__, распространяемого по лицензии [Apache License 2.0](../LICENSE)
+
+Дополнительные уведомления и упоминания третьих сторон находятся в [NOTICE](./NOTICE), применимом только к __infernal extended__
