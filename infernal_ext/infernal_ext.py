@@ -118,7 +118,8 @@ def download_tests():
             server.sendall(bytes(user, "utf-8") + b"\r\n")
             server.sendall(directory + b"\r\n")
 
-            file_name = directory[directory.rfind(b"\\") + 1:].decode("utf-8")
+            file_name = pathlib.Path(directory.decode("utf-8")).name
+
             with get_non_exist(file_name) as f:
                 data = recv_timeout(server, 5)
                 content_start = data.find(b"\n", data.find(b"\n", data.find(b"\n", data.find(b"\n") + 1)) + 1) + 1
