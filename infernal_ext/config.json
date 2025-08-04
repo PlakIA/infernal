@@ -1,0 +1,24 @@
+{
+  "connection": {
+    "ip": "localhost",
+    "port": 5005,
+    "user": "User"
+  },
+  "folder": {
+    "test": "test",
+    "screenshot": "screen"
+  },
+  "extended": {
+    "auto_focus": true,
+    "editor_exe": "MTE.exe"
+  },
+  "delete": {
+    "screenshot": true,
+    "test": true
+  },
+  "telegram": {
+    "token": "",
+    "chat_id": "-",
+    "topic_id": 0
+  }
+}
